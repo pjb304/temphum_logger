@@ -17,7 +17,7 @@ def read_w1():
         Read the one-wire sensor to get a temperature reading
     """
     sensor = W1ThermSensor()
-    return sensor.get_temperature()
+    return float(sensor.get_temperature())
 
 def read_am2302(pin):
     """
@@ -32,8 +32,8 @@ def loop(device, config_file, sensor_type, interval, pin=None):
         Loop indefintely and take the readings from the specified sensor
     """
     while True:
-        db = TempHumDatabase(config_file)
-        try:
+            db = TempHumDatabase(config_file)
+        #try:
             while True:
                 temperature = None
                 humidity = None
@@ -48,9 +48,9 @@ def loop(device, config_file, sensor_type, interval, pin=None):
                     raise ValueError("Unknown sensor type")
                 db.store_reading(device, temperature, humidity)
                 time.sleep(interval)
-        except MySQLdb.OperationError as exp:
-            print(exp)
-            time.sleep(120)
+        #except MySQLdb.OperationError as exp:
+        #    print(exp)
+        #    time.sleep(120)
 
 if __name__ == "__main__":
     PARSER = ArgumentParser(
@@ -83,6 +83,7 @@ if __name__ == "__main__":
         "--interval",
         action="store",
         required=True,
+        type=int,
         help="The interval between readings")
     PARSER.add_argument(
         "-p",

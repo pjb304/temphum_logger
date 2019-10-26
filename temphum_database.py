@@ -52,7 +52,7 @@ class TempHumDatabase:
         try:
             cursor = self.db.cursor()
             cursor.execute(
-                "INSERT INTO temphum_readings (timestamp, device, temperature, humidity) VALUES (%s, %s, %d, %d);",
+                "INSERT INTO temphum_readings (timestamp, device, temperature, humidity) VALUES (%s, %s, %s, %s);",
                 (datetime.now().strftime("%Y-%m-%d %H:%M:%S"), device, temperature, humidity))
             cursor.close()
             self.db.commit()
