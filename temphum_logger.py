@@ -23,8 +23,13 @@ def read_am2302(pin):
     """
         Read temperature and humidity data from an AM2302 sensor
     """
-    humidity, temperature = Adafruit_DHT.read(Adafruit_DHT.DHT22, pin)
-    return (temperature, humidity)
+    for _ in range(0,5):
+        humidity, temperature = Adafruit_DHT.read(Adafruit_DHT.DHT22, pin)
+        if humidity is not None and temperature is not None:
+            break
+        else:
+            time.sleep(1)
+    return (round(temperature, 1), round(humidity,1))
 
 
 def loop(device, config_file, sensor_type, interval, pin=None):
