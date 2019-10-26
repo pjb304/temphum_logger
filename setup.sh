@@ -13,5 +13,5 @@ git clone https://github.com/adafruit/Adafruit_Python_DHT.git
 cd Adafruit_Python_DHT
 sudo python3 setup.py install
 
-pip3 install w1thermsensor
-pip install mysqlclient
+pip install mysqlclient configobj w1thermsensor
+
