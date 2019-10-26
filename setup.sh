@@ -1,7 +1,7 @@
 #!/bin/bash
 
 sudo raspi-config nonint do_memory_split 16
-sudo apt install python3-pip
+sudo apt install python3-pip python3-setuptools
 
 echo "---------- Install package for AM2302 ----------"
 cd $HOME
