@@ -23,8 +23,15 @@ def read_am2302(pin):
     """
         Read temperature and humidity data from an AM2302 sensor
     """
-    humidity, temperature = Adafruit_DHT.read(Adafruit_DHT.DHT22, pin)
-    return (temperature, humidity)
+    for _ in range(0,5):
+        humidity, temperature = Adafruit_DHT.read(Adafruit_DHT.DHT22, pin)
+        if humidity is not None and temperature is not None:
+            break
+        else:
+            time.sleep(1)
+    if humidity is None and temperature is None:
+        return (None, None)
+    return (round(temperature, 1), round(humidity,1))
 
 
 def loop(device, config_file, sensor_type, interval, pin=None):
@@ -46,7 +53,8 @@ def loop(device, config_file, sensor_type, interval, pin=None):
                     temperature = read_w1()
                 else:
                     raise ValueError("Unknown sensor type")
-                db.store_reading(device, temperature, humidity)
+                if temperature is not None:
+                    db.store_reading(device, temperature, humidity)
                 time.sleep(interval)
         #except MySQLdb.OperationError as exp:
         #    print(exp)
@@ -96,7 +104,7 @@ if __name__ == "__main__":
         PARSER.error("AM2302 requires a pin to be set")
     SENSOR = ""
     if ARGS.am2302:
-        SENSOR = "am2302"
+        SENSOR = "AM2302"
     elif ARGS.w1:
         SENSOR="w1"
     else:
