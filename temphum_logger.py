@@ -62,7 +62,7 @@ def loop(device, config_file, sensor_type, interval, pin=None):
     """
     while True:
             db = TempHumDatabase(config_file)
-        #try:
+        try:
             while True:
                 temperature = None
                 humidity = None
@@ -80,9 +80,9 @@ def loop(device, config_file, sensor_type, interval, pin=None):
                 if temperature is not None:
                     db.store_reading(device, temperature, humidity)
                 time.sleep(interval)
-        #except MySQLdb.OperationError as exp:
-        #    print(exp)
-        #    time.sleep(120)
+        except MySQLdb.OperationError as exp:
+            print(exp)
+            time.sleep(120)
 
 if __name__ == "__main__":
     PARSER = ArgumentParser(
