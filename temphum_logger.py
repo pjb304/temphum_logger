@@ -62,27 +62,27 @@ def loop(device, config_file, sensor_type, interval, pin=None):
     """
     while True:
             db = TempHumDatabase(config_file)
-        try:
-            while True:
-                temperature = None
-                humidity = None
-                if sensor_type == AM2302:
-                    if pin is None:
-                        raise ValueError("No pin specified")
+            try:
+                while True:
+                    temperature = None
+                    humidity = None
+                    if sensor_type == AM2302:
+                        if pin is None:
+                            raise ValueError("No pin specified")
+                        else:
+                            temperature, humidity = read_am2302(pin)
+                    elif sensor_type == W1:
+                        temperature = read_w1()
+                    elif sensor_type == SHT31:
+                        temperature, humidity = read_sht31()
                     else:
-                        temperature, humidity = read_am2302(pin)
-                elif sensor_type == W1:
-                    temperature = read_w1()
-                elif sensor_type == SHT31:
-                    temperature, humidity = read_sht31()
-                else:
-                    raise ValueError("Unknown sensor type")
-                if temperature is not None:
-                    db.store_reading(device, temperature, humidity)
-                time.sleep(interval)
-        except MySQLdb.OperationError as exp:
-            print(exp)
-            time.sleep(120)
+                        raise ValueError("Unknown sensor type")
+                    if temperature is not None:
+                        db.store_reading(device, temperature, humidity)
+                    time.sleep(interval)
+            except MySQLdb.OperationError as exp:
+                print(exp)
+                time.sleep(120)
 
 if __name__ == "__main__":
     PARSER = ArgumentParser(
